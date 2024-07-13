@@ -1,11 +1,12 @@
 import type { Metadata } from 'next';
+import '../scss/null.scss';
+import Navbar from '@/components/Navbar';
+import { routes } from '@/routes/routesConfig';
 
 export const metadata: Metadata = {
   title: 'Currency Converter',
   description: 'Simple currency converter.',
 };
-
-// const linkList = ['Home', 'Converter', 'Currency List', 'Something'];
 
 export default function RootLayout({
   children,
@@ -15,13 +16,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        {/* <nav>
-          <ul>
-            {linkList.map((link, index) => (
-              <div key={index}>{link}</div>
-            ))}
-          </ul>
-        </nav> */}
+        <nav>
+          <Navbar title="Currency converter" linkList={routes} />
+        </nav>
         <main>{children}</main>
       </body>
     </html>
