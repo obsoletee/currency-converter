@@ -1,7 +1,8 @@
 import type { Metadata } from 'next';
-import '../scss/null.scss';
 import Navbar from '@/components/Navbar';
 import { routes } from '@/routes/routesConfig';
+
+import '../scss/null.scss';
 
 export const metadata: Metadata = {
   title: 'Currency Converter',

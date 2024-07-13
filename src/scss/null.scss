@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 * {
   padding: 0;
   margin: 0;
@@ -85,4 +89,11 @@ h5,
 h6 {
   font-size: inherit;
   font-weight: 400;
+}
+
+@font-face {
+  font-family: 'NunitoSans';
+  src: url('/fonts/NunitoSans_7pt-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
 }
