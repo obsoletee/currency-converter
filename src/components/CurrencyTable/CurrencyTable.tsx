@@ -18,6 +18,7 @@ export const CurrencyTable = () => {
   const [rows, setRows] = useState<CurrencyList[]>([]);
   const [select, setSelect] = useState('');
   const [isCurrencyListLoaded, setIsCurrencyListLoaded] = useState(false);
+  const [inputValues, setInputValues] = useState<{ [key: string]: number }>({});
 
   const addHandle = () => {
     const selectedCurrency = currencyList.find(
@@ -29,7 +30,37 @@ export const CurrencyTable = () => {
         prevCurrencyList.filter((currency) => currency.name !== select),
       );
       setSelect('');
+      setInputValues((prevValues) => {
+        const updatedValues = { ...prevValues, [selectedCurrency.name]: 1 };
+        const baseRate = rows.length > 0 ? rows[0].rate : 1;
+
+        rows.forEach((row) => {
+          updatedValues[row.name] =
+            (updatedValues[selectedCurrency.name] * row.rate) /
+            selectedCurrency.rate;
+        });
+
+        return updatedValues;
+      });
     }
+  };
+
+  const handleInputChange = (name: string, value: string) => {
+    const newValue = parseFloat(value);
+    if (isNaN(newValue)) return;
+
+    setInputValues((prevValues) => {
+      const updatedValues = { ...prevValues, [name]: newValue };
+      const baseRate = rows.find((row) => row.name === name)?.rate || 1;
+
+      rows.forEach((row) => {
+        if (row.name !== name) {
+          updatedValues[row.name] = (newValue * row.rate) / baseRate;
+        }
+      });
+
+      return updatedValues;
+    });
   };
 
   useEffect(() => {
@@ -85,8 +116,10 @@ export const CurrencyTable = () => {
                   </div>
                   <input
                     className="text-3xl px-10 py-5 text-left"
-                    value={row.rate}
-                    readOnly
+                    value={inputValues[row.name] || ''}
+                    onChange={(e) =>
+                      handleInputChange(row.name, e.target.value)
+                    }
                   />
                 </div>
               ))}
