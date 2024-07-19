@@ -20,7 +20,8 @@ const config: Config = {
         'gray-light': '#d3dce6',
       },
       fontFamily: {
-        nunito: ['NunitoSans', 'sans-serif'],
+        seasons: ['Seasons'],
+        nunito: ['Nunito'],
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',

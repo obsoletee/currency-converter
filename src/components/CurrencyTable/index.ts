@@ -1,0 +1,1 @@
+export { CurrencyTable } from './CurrencyTable';
