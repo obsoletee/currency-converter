@@ -1,3 +1,166 @@
+// 'use client';
+// import { CircularProgress } from '@mui/material';
+// import React, { useEffect, useState } from 'react';
+
+// interface CurrencyList {
+//   name: string;
+//   rate: number;
+// }
+
+// const fetchData = async () => {
+//   const response = await fetch('https://open.er-api.com/v6/latest/USD');
+//   const data = await response.json();
+//   return data.rates;
+// };
+
+// export const CurrencyTable = () => {
+//   const [currencyList, setCurrencyList] = useState<CurrencyList[]>([]);
+//   const [rows, setRows] = useState<CurrencyList[]>([]);
+//   const [select, setSelect] = useState('');
+//   const [isCurrencyListLoaded, setIsCurrencyListLoaded] = useState(false);
+//   const [inputValues, setInputValues] = useState<{ [key: string]: number }>({});
+
+//   const addHandle = () => {
+//     const selectedCurrency = currencyList.find(
+//       (currency) => currency.name === select,
+//     );
+//     if (selectedCurrency) {
+//       setRows((prevRows) => [...prevRows, selectedCurrency]);
+//       setCurrencyList((prevCurrencyList) =>
+//         prevCurrencyList
+//           .filter((currency) => currency.name !== select)
+//           .sort((a, b) => a.name.localeCompare(b.name)),
+//       );
+//       setSelect('');
+//       setInputValues((prevValues) => {
+//         const updatedValues = { ...prevValues, [selectedCurrency.name]: 1 };
+//         const baseRate = rows.length > 0 ? rows[0].rate : 1;
+
+//         rows.forEach((row) => {
+//           updatedValues[row.name] =
+//             (updatedValues[selectedCurrency.name] * row.rate) /
+//             selectedCurrency.rate;
+//         });
+
+//         return updatedValues;
+//       });
+//     }
+//   };
+
+//   const handleDelete = (name: string) => {
+//     const removedCurrency = rows.find((row) => row.name === name);
+//     if (removedCurrency) {
+//       setRows((prevRows) => prevRows.filter((row) => row.name !== name));
+//       setCurrencyList((prevCurrencyList) => {
+//         const updatedList = [...prevCurrencyList, removedCurrency];
+//         return updatedList.sort((a, b) => a.name.localeCompare(b.name));
+//       });
+//       setInputValues((prevValues) => {
+//         const updatedValues = { ...prevValues };
+//         delete updatedValues[name];
+//         return updatedValues;
+//       });
+//     }
+//   };
+
+//   const handleInputChange = (name: string, value: string) => {
+//     const newValue = parseFloat(value);
+//     if (isNaN(newValue)) return;
+
+//     setInputValues((prevValues) => {
+//       const updatedValues = { ...prevValues, [name]: newValue };
+//       const baseRate = rows.find((row) => row.name === name)?.rate || 1;
+
+//       rows.forEach((row) => {
+//         if (row.name !== name) {
+//           updatedValues[row.name] = (newValue * row.rate) / baseRate;
+//         }
+//       });
+
+//       return updatedValues;
+//     });
+//   };
+
+//   useEffect(() => {
+//     const getData = async () => {
+//       const data = await fetchData();
+//       const formattedData = Object.keys(data).map((key) => ({
+//         name: key,
+//         rate: data[key],
+//       }));
+//       setCurrencyList(formattedData);
+//       setIsCurrencyListLoaded(true);
+//     };
+//     getData();
+//   }, []);
+
+//   return (
+//     <>
+//       {isCurrencyListLoaded ? (
+//         <div className="w-full flex justify-center overflow-hidden font-nunito">
+//           <div className="w-full flex justify-center p-10">
+//             <div className="flex-col w-full align-center">
+//               <div className="w-full flex align-center justify-around mb-5">
+//                 <select
+//                   value={select}
+//                   onChange={(e) => {
+//                     setSelect(e.currentTarget.value);
+//                   }}
+//                   className="w-1/3 text-2xl px-10 py-5 border-2 border-black border-solid rounded-lg"
+//                 >
+//                   <option value="" disabled>
+//                     Select a currency
+//                   </option>
+//                   {currencyList.map((row, index) => (
+//                     <option key={index} value={row.name}>
+//                       {row.name}
+//                     </option>
+//                   ))}
+//                 </select>
+//                 <button
+//                   onClick={addHandle}
+//                   className="w-1/3 text-3xl px-10 py-5 border-2 border-black border-solid rounded-lg"
+//                 >
+//                   Add
+//                 </button>
+//               </div>
+//               {rows.map((row, index) => (
+//                 <div
+//                   key={index}
+//                   className="flex w-full mb-5 border-2 border-black border-solid"
+//                 >
+//                   <div className="flex items-center text-3xl w-1/2 px-10 py-5 border-r-2 border-black border-solid text-center">
+//                     {row.name}
+//                   </div>
+//                   <input
+//                     className="text-3xl w-1/4 px-10 py-5 text-left border-r-2 border-black border-solid"
+//                     value={inputValues[row.name] || ''}
+//                     onChange={(e) =>
+//                       handleInputChange(row.name, e.target.value)
+//                     }
+//                   />
+//                   <div className="w-1/4 px-10 py-5">
+//                     <button
+//                       onClick={() => handleDelete(row.name)}
+//                       className="text-3xl px-10 py-2 border-2 border-black border-solid rounded-lg"
+//                     >
+//                       Delete
+//                     </button>
+//                   </div>
+//                 </div>
+//               ))}
+//             </div>
+//           </div>
+//         </div>
+//       ) : (
+//         <div className="w-full text-center fixed top-1/3  ">
+//           <CircularProgress />
+//         </div>
+//       )}
+//     </>
+//   );
+// };
+
 'use client';
 import { CircularProgress } from '@mui/material';
 import React, { useEffect, useState } from 'react';
@@ -13,34 +176,75 @@ const fetchData = async () => {
   return data.rates;
 };
 
+interface State {
+  currencyList: CurrencyList[];
+  rows: CurrencyList[];
+  select: string;
+  isCurrencyListLoaded: boolean;
+  inputValues: { [key: string]: number };
+}
+
 export const CurrencyTable = () => {
-  const [currencyList, setCurrencyList] = useState<CurrencyList[]>([]);
-  const [rows, setRows] = useState<CurrencyList[]>([]);
-  const [select, setSelect] = useState('');
-  const [isCurrencyListLoaded, setIsCurrencyListLoaded] = useState(false);
-  const [inputValues, setInputValues] = useState<{ [key: string]: number }>({});
+  const [state, setState] = useState<State>({
+    currencyList: [],
+    rows: [],
+    select: '',
+    isCurrencyListLoaded: false,
+    inputValues: {},
+  });
 
   const addHandle = () => {
-    const selectedCurrency = currencyList.find(
-      (currency) => currency.name === select,
+    const selectedCurrency = state.currencyList.find(
+      (currency) => currency.name === state.select,
     );
     if (selectedCurrency) {
-      setRows((prevRows) => [...prevRows, selectedCurrency]);
-      setCurrencyList((prevCurrencyList) =>
-        prevCurrencyList.filter((currency) => currency.name !== select),
-      );
-      setSelect('');
-      setInputValues((prevValues) => {
-        const updatedValues = { ...prevValues, [selectedCurrency.name]: 1 };
-        const baseRate = rows.length > 0 ? rows[0].rate : 1;
+      setState((prevState) => {
+        const newRows = [...prevState.rows, selectedCurrency];
+        const newCurrencyList = prevState.currencyList
+          .filter((currency) => currency.name !== state.select)
+          .sort((a, b) => a.name.localeCompare(b.name));
 
-        rows.forEach((row) => {
-          updatedValues[row.name] =
-            (updatedValues[selectedCurrency.name] * row.rate) /
+        const newInputValues = {
+          ...prevState.inputValues,
+          [selectedCurrency.name]: 1,
+        };
+
+        const baseRate = newRows.length > 1 ? newRows[0].rate : 1;
+        newRows.forEach((row) => {
+          newInputValues[row.name] =
+            (newInputValues[selectedCurrency.name] * row.rate) /
             selectedCurrency.rate;
         });
 
-        return updatedValues;
+        return {
+          ...prevState,
+          rows: newRows,
+          currencyList: newCurrencyList,
+          select: '',
+          inputValues: newInputValues,
+        };
+      });
+    }
+  };
+
+  const handleDelete = (name: string) => {
+    const removedCurrency = state.rows.find((row) => row.name === name);
+    if (removedCurrency) {
+      setState((prevState) => {
+        const newRows = prevState.rows.filter((row) => row.name !== name);
+        const newCurrencyList = [
+          ...prevState.currencyList,
+          removedCurrency,
+        ].sort((a, b) => a.name.localeCompare(b.name));
+        const newInputValues = { ...prevState.inputValues };
+        delete newInputValues[name];
+
+        return {
+          ...prevState,
+          rows: newRows,
+          currencyList: newCurrencyList,
+          inputValues: newInputValues,
+        };
       });
     }
   };
@@ -49,17 +253,21 @@ export const CurrencyTable = () => {
     const newValue = parseFloat(value);
     if (isNaN(newValue)) return;
 
-    setInputValues((prevValues) => {
-      const updatedValues = { ...prevValues, [name]: newValue };
-      const baseRate = rows.find((row) => row.name === name)?.rate || 1;
+    setState((prevState) => {
+      const newInputValues = { ...prevState.inputValues, [name]: newValue };
+      const baseRate =
+        prevState.rows.find((row) => row.name === name)?.rate || 1;
 
-      rows.forEach((row) => {
+      prevState.rows.forEach((row) => {
         if (row.name !== name) {
-          updatedValues[row.name] = (newValue * row.rate) / baseRate;
+          newInputValues[row.name] = (newValue * row.rate) / baseRate;
         }
       });
 
-      return updatedValues;
+      return {
+        ...prevState,
+        inputValues: newInputValues,
+      };
     });
   };
 
@@ -70,30 +278,37 @@ export const CurrencyTable = () => {
         name: key,
         rate: data[key],
       }));
-      setCurrencyList(formattedData);
-      setIsCurrencyListLoaded(true);
+      setState((prevState) => ({
+        ...prevState,
+        currencyList: formattedData,
+        isCurrencyListLoaded: true,
+      }));
     };
     getData();
   }, []);
 
   return (
     <>
-      {isCurrencyListLoaded ? (
+      {state.isCurrencyListLoaded ? (
         <div className="w-full flex justify-center overflow-hidden font-nunito">
           <div className="w-full flex justify-center p-10">
             <div className="flex-col w-full align-center">
               <div className="w-full flex align-center justify-around mb-5">
                 <select
-                  value={select}
+                  value={state.select}
                   onChange={(e) => {
-                    setSelect(e.currentTarget.value);
+                    const value = (e.target as HTMLSelectElement).value;
+                    setState((prevState) => ({
+                      ...prevState,
+                      select: value,
+                    }));
                   }}
                   className="w-1/3 text-2xl px-10 py-5 border-2 border-black border-solid rounded-lg"
                 >
                   <option value="" disabled>
                     Select a currency
                   </option>
-                  {currencyList.map((row, index) => (
+                  {state.currencyList.map((row, index) => (
                     <option key={index} value={row.name}>
                       {row.name}
                     </option>
@@ -106,21 +321,29 @@ export const CurrencyTable = () => {
                   Add
                 </button>
               </div>
-              {rows.map((row, index) => (
+              {state.rows.map((row, index) => (
                 <div
                   key={index}
                   className="flex w-full mb-5 border-2 border-black border-solid"
                 >
-                  <div className="text-3xl w-1/4 px-10 py-5 border-r-2 border-black border-solid text-center">
+                  <div className="flex items-center text-3xl w-1/2 px-10 py-5 border-r-2 border-black border-solid text-center">
                     {row.name}
                   </div>
                   <input
-                    className="text-3xl px-10 py-5 text-left"
-                    value={inputValues[row.name] || ''}
+                    className="text-3xl w-1/4 px-10 py-5 text-left border-r-2 border-black border-solid"
+                    value={state.inputValues[row.name] || ''}
                     onChange={(e) =>
                       handleInputChange(row.name, e.target.value)
                     }
                   />
+                  <div className="w-1/4 px-10 py-5">
+                    <button
+                      onClick={() => handleDelete(row.name)}
+                      className="text-3xl px-10 py-2 border-2 border-black border-solid rounded-lg"
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
