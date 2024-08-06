@@ -78,6 +78,9 @@ export default function Currency() {
         <div className="w-full flex justify-center overflow-hidden font-nunito">
           <div className="w-full flex justify-center p-10">
             <div className="flex-col w-full align-center">
+              <div className="text-4xl w-full text-center mb-10 font-bold">
+                Supported Currency List
+              </div>
               <TableContainer component={Paper}>
                 <Table aria-label="Supported Currency Table">
                   <TableHead>
