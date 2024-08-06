@@ -1,7 +1,8 @@
 'use client';
-import { CircularProgress } from '@mui/material';
 import React, { useEffect, useState } from 'react';
+import { CircularProgress } from '@mui/material';
 
+import { supportedCurrencyList } from '@/model/SupportedCurrencyList';
 interface CurrencyList {
   name: string;
   rate: number;
@@ -158,7 +159,15 @@ export const CurrencyTable = () => {
                   </option>
                   {state.currencyList.map((row, index) => (
                     <option key={index} value={row.name}>
-                      {row.name}
+                      {`${
+                        supportedCurrencyList.find(
+                          (currency) => currency.currencyCode === row.name,
+                        )?.currencyCode
+                      } (${
+                        supportedCurrencyList.find(
+                          (currency) => currency.currencyCode === row.name,
+                        )?.currencyName
+                      })`}
                     </option>
                   ))}
                 </select>
@@ -191,7 +200,17 @@ export const CurrencyTable = () => {
                     className="flex w-full mb-5 border-2 border-black border-solid rounded-xl"
                   >
                     <div className="flex items-center text-3xl w-1/2 px-10 py-5 border-r-2 border-black border-solid text-center">
-                      {row.name}
+                      <div>
+                        {`${
+                          supportedCurrencyList.find(
+                            (currency) => currency.currencyCode === row.name,
+                          )?.currencyCode
+                        } (${
+                          supportedCurrencyList.find(
+                            (currency) => currency.currencyCode === row.name,
+                          )?.currencyName
+                        })`}
+                      </div>
                     </div>
                     <input
                       className="text-3xl w-1/4 px-10 py-5 text-left border-r-2 border-black border-solid "
