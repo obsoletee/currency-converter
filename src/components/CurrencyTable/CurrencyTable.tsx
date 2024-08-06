@@ -46,6 +46,13 @@ export const CurrencyTable = () => {
           [selectedCurrency.name]: 1,
         };
 
+        // Update all existing input values based on the new currency added
+        newRows.forEach((row) => {
+          if (row.name !== selectedCurrency.name) {
+            newInputValues[row.name] = (1 * row.rate) / selectedCurrency.rate;
+          }
+        });
+
         return {
           ...prevState,
           rows: newRows,
@@ -66,8 +73,21 @@ export const CurrencyTable = () => {
           ...prevState.currencyList,
           removedCurrency,
         ].sort((a, b) => a.name.localeCompare(b.name));
+
         const newInputValues = { ...prevState.inputValues };
         delete newInputValues[name];
+
+        // Recalculate the input values based on the first currency in the list
+        if (newRows.length > 0) {
+          const baseCurrency = newRows[0];
+          newRows.forEach((row) => {
+            if (row.name !== baseCurrency.name) {
+              newInputValues[row.name] =
+                (newInputValues[baseCurrency.name] * row.rate) /
+                baseCurrency.rate;
+            }
+          });
+        }
 
         return {
           ...prevState,
@@ -133,7 +153,7 @@ export const CurrencyTable = () => {
                       select: value,
                     }));
                   }}
-                  className="w-1/3 text-2xl px-10 py-5 border-2 border-black border-solid rounded-lg"
+                  className="ease duration-200 w-1/3 text-2xl px-10 py-5 border-2 border-black border-solid rounded-xl hover:shadow-xl"
                 >
                   <option value="" disabled>
                     Select a currency
@@ -146,36 +166,53 @@ export const CurrencyTable = () => {
                 </select>
                 <button
                   onClick={addHandle}
-                  className="w-1/3 text-3xl px-10 py-5 border-2 border-black border-solid rounded-lg"
+                  className="ease duration-200 w-1/3 text-3xl px-10 py-5 border-2 border-black border-solid rounded-xl hover:shadow-xl hover:translate-y-1 hover:bg-slate-200 active:bg-slate-700 active:text-white"
                 >
                   Add
                 </button>
               </div>
-              {state.rows.map((row, index) => (
-                <div
-                  key={index}
-                  className="flex w-full mb-5 border-2 border-black border-solid"
-                >
-                  <div className="flex items-center text-3xl w-1/2 px-10 py-5 border-r-2 border-black border-solid text-center">
-                    {row.name}
-                  </div>
-                  <input
-                    className="text-3xl w-1/4 px-10 py-5 text-left border-r-2 border-black border-solid"
-                    value={state.inputValues[row.name] || ''}
-                    onChange={(e) =>
-                      handleInputChange(row.name, e.target.value)
-                    }
-                  />
-                  <div className="w-1/4 px-10 py-5">
-                    <button
-                      onClick={() => handleDelete(row.name)}
-                      className="text-3xl px-10 py-2 border-2 border-black border-solid rounded-lg"
-                    >
-                      Delete
-                    </button>
-                  </div>
+              <div className="flex w-full mb-5 border-2 border-black border-solid rounded-xl">
+                <div className="flex items-center text-3xl w-1/2 px-10 py-5 border-r-2 border-black border-solid text-center">
+                  Currency
                 </div>
-              ))}
+                <div className="text-3xl w-1/4 px-10 py-5 text-left border-r-2 border-black border-solid ">
+                  Value
+                </div>
+                <div className="text-3xl w-1/4 px-10 py-5 text-left">
+                  Actions
+                </div>
+              </div>
+              {state.rows.length === 0 ? (
+                <div className="text-center text-3xl underline">
+                  No data found
+                </div>
+              ) : (
+                state.rows.map((row, index) => (
+                  <div
+                    key={index}
+                    className="flex w-full mb-5 border-2 border-black border-solid rounded-xl"
+                  >
+                    <div className="flex items-center text-3xl w-1/2 px-10 py-5 border-r-2 border-black border-solid text-center">
+                      {row.name}
+                    </div>
+                    <input
+                      className="text-3xl w-1/4 px-10 py-5 text-left border-r-2 border-black border-solid "
+                      value={state.inputValues[row.name] || ''}
+                      onChange={(e) =>
+                        handleInputChange(row.name, e.target.value)
+                      }
+                    />
+                    <div className="w-1/4 px-10 py-5 text-center">
+                      <button
+                        onClick={() => handleDelete(row.name)}
+                        className="ease duration-200 text-3xl px-10 py-2 border-2 border-black border-solid rounded-lg hover:shadow-xl hover:translate-y-0.5 hover:bg-slate-200 active:bg-slate-700 active:text-white"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                ))
+              )}
             </div>
           </div>
         </div>
