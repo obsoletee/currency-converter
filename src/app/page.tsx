@@ -7,40 +7,14 @@ import {
   Button,
 } from '@mui/material';
 
-const data = {
-  paragraph: ['lorem', 'lorem', 'lorem'],
-};
+import { stackList } from '@/model/StackList';
 
-const stackList = [
-  {
-    id: 1,
-    name: 'React',
-    bio: 'The library for web and native user interfaces',
-    image: '/images/reactLogo.png',
-    docs: 'https://react.dev/',
-  },
-  {
-    id: 2,
-    name: 'Next.js',
-    bio: 'The React Framework for the Web',
-    image: '/images/nextLogo.jpg',
-    docs: 'https://nextjs.org/',
-  },
-  {
-    id: 3,
-    name: 'Material UI',
-    bio: 'MUI offers a comprehensive suite of free UI tools to help you ship new features faster. Start with Material UI, our fully-loaded component library, or bring your own design system to our production-ready components.',
-    image: '/images/muiLogo.png',
-    docs: 'https://mui.com/',
-  },
-  {
-    id: 4,
-    name: 'Tailwind CSS',
-    bio: 'A utility-first CSS framework packed with classes like flex, pt-4, text-center and rotate-90 that can be composed to build any design, directly in your markup.',
-    image: '/images/tailwindcssLogo.jpg',
-    docs: 'https://tailwindcss.com/',
-  },
-];
+const data = {
+  paragraph: [
+    'This is a converter that allows you to find out the exchange rates of any of the 161 currently available currencies. The converter is available on the "Converter" tab, and the table with all currencies on the "Currency List" tab.',
+    'The main stack of technologies used in the development is given below. Currency exchange rate data comes from the server and is stored in the database.',
+  ],
+};
 
 export default function Page() {
   return (
@@ -59,12 +33,12 @@ export default function Page() {
               ))}
             </div>
             <div className="text-4xl font-bold mb-10">Technology Stack</div>
-            <div className="flex flex-wrap">
+            <div className="flex flex-wrap gap-10">
               {stackList.map((stack) => (
                 <Card
-                  className="transition duration-200 ease-out hover:scale-105 shadow-xl mx-5"
+                  className="transition duration-200 ease-out hover:scale-105 shadow-xl"
                   key={stack.id}
-                  sx={{ width: 345, display: 'flex', flexDirection: 'column' }}
+                  sx={{ width: 320, display: 'flex', flexDirection: 'column' }}
                 >
                   <CardMedia sx={{ height: 140 }} image={stack.image} />
                   <CardContent sx={{ flexGrow: 1 }}>
