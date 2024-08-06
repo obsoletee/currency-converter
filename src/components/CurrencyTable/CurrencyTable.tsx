@@ -46,7 +46,6 @@ export const CurrencyTable = () => {
           [selectedCurrency.name]: 1,
         };
 
-        // Update all existing input values based on the new currency added
         newRows.forEach((row) => {
           if (row.name !== selectedCurrency.name) {
             newInputValues[row.name] = (1 * row.rate) / selectedCurrency.rate;
@@ -77,7 +76,6 @@ export const CurrencyTable = () => {
         const newInputValues = { ...prevState.inputValues };
         delete newInputValues[name];
 
-        // Recalculate the input values based on the first currency in the list
         if (newRows.length > 0) {
           const baseCurrency = newRows[0];
           newRows.forEach((row) => {
