@@ -29,14 +29,6 @@ export default function Currency() {
     rowsPerPage: 10,
   });
 
-  const emptyRows =
-    state.page > 0
-      ? Math.max(
-          0,
-          (1 + state.page) * state.rowsPerPage - supportedCurrencyList.length,
-        )
-      : 0;
-
   const handleChangePage = (
     e: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number,
